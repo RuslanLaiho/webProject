@@ -1,0 +1,5 @@
+#Config yml file
+
+   Url: jdbc:postgresql://localhost:5432/postgres
+   User: postgres
+   Password: 1488228
