@@ -1,31 +1,33 @@
 package com.example.school.configs;
 
 import org.postgresql.ds.PGPoolingDataSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Configuration
+
+@RestController
+@RequestMapping("/Url")
 public class DataSourceConfig {
 
-//    @Value("jdbc:postgresql://localhost:5432/postgres")
-//    private String url;
-//
-//    @Value("postgres")
-//    private String user;
-//
-//    @Value("1488228")
-//    private String password;
+  @Value("${Url}")
+  private String url;
+
+  @Value("${User}")
+  private String user;
+
+  @Value("${Password}")
+  private String password;
 
     @Bean
     public PGPoolingDataSource getDataSource() {
         PGPoolingDataSource dataSource = new PGPoolingDataSource();
 
-        YAMLConfig yamlConfig = new YAMLConfig();
-        dataSource.setUrl(yamlConfig.getUrl());
-        dataSource.setUser(yamlConfig.getUser());
-        dataSource.setPassword(yamlConfig.getPassword());
+        dataSource.setUrl(url);
+        dataSource.setUser(user);
+        dataSource.setPassword(password);
+
         return dataSource;
     }
 }
