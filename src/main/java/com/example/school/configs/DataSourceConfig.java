@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/Url")
 public class DataSourceConfig {
 
-  @Value("${Url}")
-  private String url;
+    @Value("${Url}")
+    private String url;
 
-  @Value("${User}")
-  private String user;
+    @Value("${User}")
+    private String user;
 
-  @Value("${Password}")
-  private String password;
+    @Value("${Password}")
+    private String password;
 
     @Bean
     public PGPoolingDataSource getDataSource() {

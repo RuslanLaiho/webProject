@@ -9,11 +9,12 @@ public class Person {
         return personId + ", " + name + ", " + occupation;
     }
 
-    public Person (String name, String occupation){
+    public Person(String name, String occupation) {
         this.name = name;
         this.occupation = occupation;
     }
 
-    public Person() {}
+    public Person() {
+    }
 
 }

@@ -20,20 +20,32 @@ public class SchoolController {
     public SchoolService schoolService;
 
     @GetMapping("/test")
-    public String test() {return "ZAWARDOOOO";}
+    public String test() {
+        return "ZAWARDOOOO";
+    }
 
     @GetMapping("/selectAllPerson")
-    public List<Person> selectAllPerson() {return schoolService.selectAllPerson();}
+    public List<Person> selectAllPerson() {
+        return schoolService.selectAllPerson();
+    }
 
     @GetMapping("/selectAllClass")
-    public List<Class> selectAllClass() {return schoolService.selectAllClass();}
+    public List<Class> selectAllClass() {
+        return schoolService.selectAllClass();
+    }
 
     @GetMapping("/selectListOfClass")
-    public List<Person> selectListOfClass(int year, String className) {return schoolService.selectClassInfo(year,className);}
+    public List<Person> selectListOfClass(int year, String className) {
+        return schoolService.selectClassInfo(year, className);
+    }
 
     @GetMapping("/selectPersonByMark")
-    public List<SubjectAndPerson> selectPersonByMark(int mark) {return schoolService.selectPersonByMark(mark);}
+    public List<SubjectAndPerson> selectPersonByMark(int mark) {
+        return schoolService.selectPersonByMark(mark);
+    }
 
     @PostMapping("/insertMark")
-    public void insertMark(@RequestBody Mark mark){schoolService.insertMark(mark);}
+    public void insertMark(@RequestBody Mark mark) {
+        schoolService.insertMark(mark);
+    }
 }

@@ -7,8 +7,9 @@ public class Mark {
     public String studentName;
     public String teacherName;
 
-    public String toString()
-    {return subject + ", " + mark + ", " + studentName + ", " + teacherName;}
+    public String toString() {
+        return subject + ", " + mark + ", " + studentName + ", " + teacherName;
+    }
 
 
 }

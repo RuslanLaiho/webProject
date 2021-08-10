@@ -6,8 +6,9 @@ public class Class {
     public int classYear;
     public String classTeacher;
 
-    public String toString()
-    {return classId + ", " + className + ", " + classYear + ", " + classTeacher;}
+    public String toString() {
+        return classId + ", " + className + ", " + classYear + ", " + classTeacher;
+    }
 
 
 }

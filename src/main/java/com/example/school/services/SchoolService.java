@@ -22,11 +22,12 @@ public class SchoolService {
     @Autowired
     public DataSource dataSource;
 
-    public  List<Person> selectAllPerson() {
+    public List<Person> selectAllPerson() {
 
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
+        DBUtils dbUtils = new DBUtils();
 
         ArrayList<Person> personList = new ArrayList<Person>();
 
@@ -36,7 +37,7 @@ public class SchoolService {
             statement = connection.prepareStatement("SELECT * FROM Person ORDER BY occupation, name;");
             resultSet = statement.executeQuery();
 
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 Person timePerson = new Person();
                 timePerson.personId = resultSet.getInt(1);
                 timePerson.name = resultSet.getString(2);
@@ -45,16 +46,14 @@ public class SchoolService {
                 personList.add(timePerson);
             }
 
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             ex.printStackTrace();
-        }
-        finally {
+        } finally {
             try {
-                connection.close();
-                statement.close();
-                resultSet.close();
-            } catch (SQLException exception)
-            {exception.printStackTrace();}
+                dbUtils.close(connection, statement, resultSet);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
         }
 
 
@@ -67,6 +66,7 @@ public class SchoolService {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
+        DBUtils dbUtils = new DBUtils();
 
         try {
 
@@ -74,8 +74,7 @@ public class SchoolService {
             statement = connection.prepareStatement("SELECT class_id, class_name, class_year, person.name FROM Class JOIN Person ON (person.person_id = class.teacher_id)");
             resultSet = statement.executeQuery();
 
-            while (resultSet.next())
-            {
+            while (resultSet.next()) {
                 Class timeClass = new Class();
                 timeClass.classId = resultSet.getInt(1);
                 timeClass.className = resultSet.getString(2);
@@ -85,15 +84,14 @@ public class SchoolService {
                 classArrayList.add(timeClass);
             }
 
-        } catch (SQLException ex) {}
-        finally {
+        } catch (SQLException ex) {
+        } finally {
             try {
-                connection.close();
-                statement.close();
-                resultSet.close();
+                dbUtils.close(connection, statement, resultSet);
 
-            }catch (SQLException exception)
-            {exception.printStackTrace();}
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
         }
 
         return classArrayList;
@@ -105,15 +103,16 @@ public class SchoolService {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
+        DBUtils dbUtils = new DBUtils();
 
-        try{
+        try {
             connection = dataSource.getConnection();
             statement = connection.prepareStatement("SELECT person.person_id, person.name, person.occupation FROM class_student " +
                     "JOIN Person ON (class_student.student_id = person.person_id) WHERE class_student.class_id = " +
-                    "(SELECT class_id FROM Class WHERE class_year = " + year + " and class_name = '"+className+"');");
+                    "(SELECT class_id FROM Class WHERE class_year = " + year + " and class_name = '" + className + "');");
             resultSet = statement.executeQuery();
 
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 Person timePerson = new Person();
                 timePerson.personId = resultSet.getInt(1);
                 timePerson.name = resultSet.getString(2);
@@ -123,31 +122,33 @@ public class SchoolService {
             }
 
 
-        } catch (SQLException ex){} finally {
+        } catch (SQLException ex) {
+        } finally {
             try {
-                connection.close();
-                statement.close();
-                resultSet.close();
-            } catch (SQLException exception) {exception.printStackTrace();}
+                dbUtils.close(connection, statement, resultSet);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
         }
 
         return personArrayList;
     }
 
-    public List<SubjectAndPerson> selectPersonByMark (int mark) {
+    public List<SubjectAndPerson> selectPersonByMark(int mark) {
         ArrayList<SubjectAndPerson> subjectAndPersonArrayList = new ArrayList<SubjectAndPerson>();
 
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
+        DBUtils dbUtils = new DBUtils();
 
         try {
 
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("SELECT subject, person.name FROM marks JOIN person ON person.person_id = marks.student_id WHERE mark = " + mark +"; ");
+            statement = connection.prepareStatement("SELECT subject, person.name FROM marks JOIN person ON person.person_id = marks.student_id WHERE mark = " + mark + "; ");
             resultSet = statement.executeQuery();
 
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 SubjectAndPerson timeSubjectAndPerson = new SubjectAndPerson();
                 timeSubjectAndPerson.subject = resultSet.getString(1);
                 timeSubjectAndPerson.name = resultSet.getString(2);
@@ -156,13 +157,13 @@ public class SchoolService {
                 subjectAndPersonArrayList.add(timeSubjectAndPerson);
             }
 
-        } catch (SQLException ex) {}
-        finally {
+        } catch (SQLException ex) {
+        } finally {
             try {
-                connection.close();
-                statement.close();
-                resultSet.close();
-            } catch (SQLException exception) {exception.printStackTrace();}
+                dbUtils.close(connection, statement, resultSet);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
         }
 
         return subjectAndPersonArrayList;
@@ -172,23 +173,28 @@ public class SchoolService {
 
         Connection connection = null;
         PreparedStatement statement = null;
+        DBUtils dbUtils = new DBUtils();
 
-        try{
+        try {
 
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("INSERT INTO marks VALUES ('"+mark.subject+"', "+mark.mark+", " +
-                    "(SELECT person_id FROM person WHERE name = '"+mark.studentName+"'), " +
-                    "(SELECT person_id FROM person WHERE name = '"+mark.teacherName+"'));");
+            statement = connection.prepareStatement("INSERT INTO marks VALUES ('" + mark.subject + "', " + mark.mark + ", " +
+                    "(SELECT person_id FROM person WHERE name = '" + mark.studentName + "'), " +
+                    "(SELECT person_id FROM person WHERE name = '" + mark.teacherName + "'));");
             statement.execute();
 
 
-        }catch (SQLException ex){ex.printStackTrace();}
-        finally {
-            try{
-                connection.close();
-                statement.close();
-            }catch (SQLException exception){exception.printStackTrace();}
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                dbUtils.close(connection, statement);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
         }
 
     }
+
+
 }
