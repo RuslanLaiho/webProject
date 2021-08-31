@@ -31,17 +31,17 @@ public class StudentAndClassService {
                     "FROM class " +
                     "WHERE class_name = '" + className + "' " +
                     "AND class_year = " + classYear + ") ); ");
+            statement.setString(1,studentName);
+            statement.setString(2,className);
+            statement.setInt(3,classYear);
             statement.execute();
 
 
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
-            try {
-                dbUtils.close(connection, statement);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
+            dbUtils.close(connection);
+            dbUtils.close(statement);
         }
 
     }

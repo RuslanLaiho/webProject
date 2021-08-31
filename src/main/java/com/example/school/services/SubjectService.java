@@ -44,11 +44,9 @@ public class SubjectService {
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
-            try {
-                dbUtils.close(connection, statement, resultSet);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
+            dbUtils.close(connection);
+            dbUtils.close(statement);
+            dbUtils.close(resultSet);
         }
 
 
@@ -63,17 +61,15 @@ public class SubjectService {
         try {
 
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("INSERT INTO Subjects VALUES ('"+subject+"') ");
+            statement = connection.prepareStatement("INSERT INTO Subjects VALUES (?) ");
+            statement.setString(1,subject);
             statement.execute();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
-            try {
-                dbUtils.close(connection, statement);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
+            dbUtils.close(connection);
+            dbUtils.close(statement);
         }
     }
 }

@@ -27,20 +27,20 @@ public class MarkService {
         try {
 
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("INSERT INTO marks VALUES ('" + mark.subject + "', " + mark.mark + ", " +
-                    "(SELECT person_id FROM person WHERE name = '" + mark.studentName + "'), " +
-                    "(SELECT person_id FROM person WHERE name = '" + mark.teacherName + "'));");
+            statement = connection.prepareStatement("INSERT INTO marks VALUES (?, ?, " +
+                    "(SELECT person_id FROM person WHERE name = ?), " +
+                    "(SELECT person_id FROM person WHERE name = ?));");
+            statement.setString(1, mark.subject);
+            statement.setInt(2, mark.mark);
+            statement.setString(3, mark.studentName);
+            statement.setString(4, mark.teacherName);
             statement.execute();
-
 
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
-            try {
-                dbUtils.close(connection, statement);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
+            dbUtils.close(connection);
+            dbUtils.close(statement);
         }
 
     }
@@ -60,7 +60,8 @@ public class MarkService {
                     "FROM Marks\n" +
                     "WHERE student_id = (SELECT person_id\n" +
                     "FROM person\n" +
-                    "WHERE name = '" + name + "');");
+                    "WHERE name = ?);");
+            statement.setString(1, name);
             resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
@@ -74,11 +75,9 @@ public class MarkService {
 
         } catch (SQLException ex) {
         } finally {
-            try {
-                dbUtils.close(connection, statement, resultSet);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
+            dbUtils.close(connection);
+            dbUtils.close(statement);
+            dbUtils.close(resultSet);
         }
 
         return subjectAndMarkList;
@@ -96,7 +95,8 @@ public class MarkService {
             connection = dataSource.getConnection();
             statement = connection.prepareStatement("SELECT person.name, mark FROM Marks\n" +
                                                         "JOIN person ON person_id=student_id\n" +
-                                                        "WHERE subject = '"+subject+"';");
+                                                        "WHERE subject = ?;");
+            statement.setString(1,subject);
             resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
@@ -110,11 +110,9 @@ public class MarkService {
 
         } catch (SQLException ex) {
         } finally {
-            try {
-                dbUtils.close(connection, statement, resultSet);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
+            dbUtils.close(connection);
+            dbUtils.close(statement);
+            dbUtils.close(resultSet);
         }
 
         return personAndMarkList;

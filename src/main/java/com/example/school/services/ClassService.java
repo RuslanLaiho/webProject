@@ -46,12 +46,9 @@ public class ClassService {
 
         } catch (SQLException ex) {
         } finally {
-            try {
-                dbUtils.close(connection, statement, resultSet);
-
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
+            dbUtils.close(connection);
+            dbUtils.close(statement);
+            dbUtils.close(resultSet);
         }
 
         return classArrayList;
@@ -69,7 +66,9 @@ public class ClassService {
             connection = dataSource.getConnection();
             statement = connection.prepareStatement("SELECT person.person_id, person.name, person.occupation FROM class_student " +
                     "JOIN Person ON (class_student.student_id = person.person_id) WHERE class_student.class_id = " +
-                    "(SELECT class_id FROM Class WHERE class_year = " + year + " and class_name = '" + className + "');");
+                    "(SELECT class_id FROM Class WHERE class_year = ? and class_name = ?);");
+            statement.setInt(1, year);
+            statement.setString(2, className);
             resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
@@ -84,11 +83,9 @@ public class ClassService {
 
         } catch (SQLException ex) {
         } finally {
-            try {
-                dbUtils.close(connection, statement, resultSet);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
+            dbUtils.close(connection);
+            dbUtils.close(statement);
+            dbUtils.close(resultSet);
         }
 
         return personArrayList;
@@ -103,19 +100,19 @@ public class ClassService {
 
             connection = dataSource.getConnection();
             statement = connection.prepareStatement("INSERT INTO Class (class_name, class_year, teacher_id) " +
-                    "VALUES ('" + className + "', " + classYear + ", (SELECT person_id " +
-                    "From person " +
-                    "WHERE name = '" + classTeacher + "')); ");
+                    "VALUES (?, ?, (SELECT person_id " +
+                    "FROM person " +
+                    "WHERE name = ?)); ");
+            statement.setString(1, className);
+            statement.setInt(2, classYear);
+            statement.setString(3, classTeacher);
             statement.execute();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
-            try {
-                dbUtils.close(connection, statement);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
+            dbUtils.close(connection);
+            dbUtils.close(statement);
         }
     }
 
@@ -134,7 +131,9 @@ public class ClassService {
                     "FROM class " +
                     "JOIN person " +
                     "ON teacher_id = person_id " +
-                    "WHERE class_name = '" + className + "' AND class_year = " + year + ";");
+                    "WHERE class_name = ? AND class_year = ?;");
+            statement.setString(1,className);
+            statement.setInt(2,year);
             resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
@@ -148,12 +147,9 @@ public class ClassService {
 
         } catch (SQLException ex) {
         } finally {
-            try {
-                dbUtils.close(connection, statement, resultSet);
-
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
+          dbUtils.close(connection);
+          dbUtils.close(statement);
+          dbUtils.close(resultSet);
         }
 
         return foundClass;
@@ -168,19 +164,19 @@ public class ClassService {
 
             connection = dataSource.getConnection();
             statement = connection.prepareStatement("UPDATE class\n" +
-                    "SET class_year = " + updateYear + "\n" +
-                    "WHERE class_name = '" + className + "'\n" +
-                    "AND class_year = " + classYear + ";");
+                    "SET class_year = ?\n" +
+                    "WHERE class_name = ?\n" +
+                    "AND class_year = ?;");
+            statement.setInt(1,updateYear);
+            statement.setString(2,className);
+            statement.setInt(3,classYear);
             statement.execute();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
-            try {
-                dbUtils.close(connection, statement);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
+            dbUtils.close(connection);
+            dbUtils.close(statement);
         }
     }
 }

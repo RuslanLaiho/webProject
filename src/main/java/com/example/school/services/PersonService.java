@@ -47,11 +47,9 @@ public class PersonService {
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
-            try {
-                dbUtils.close(connection, statement, resultSet);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
+            dbUtils.close(connection);
+            dbUtils.close(statement);
+            dbUtils.close(resultSet);
         }
 
 
@@ -69,7 +67,8 @@ public class PersonService {
         try {
 
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("SELECT subject, person.name FROM marks JOIN person ON person.person_id = marks.student_id WHERE mark = " + mark + "; ");
+            statement = connection.prepareStatement("SELECT subject, person.name FROM marks JOIN person ON person.person_id = marks.student_id WHERE mark = ?; ");
+            statement.setInt(1,mark);
             resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
@@ -83,11 +82,9 @@ public class PersonService {
 
         } catch (SQLException ex) {
         } finally {
-            try {
-                dbUtils.close(connection, statement, resultSet);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
+            dbUtils.close(connection);
+            dbUtils.close(statement);
+            dbUtils.close(resultSet);
         }
 
         return subjectAndPersonArrayList;
@@ -101,18 +98,17 @@ public class PersonService {
         try {
 
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("INSERT INTO person (name, occupation) VALUES ('" + name + "', '" + occupation + "'); ");
+            statement = connection.prepareStatement("INSERT INTO person (name, occupation) VALUES (?, ?); ");
+            statement.setString(1,name);
+            statement.setString(2,occupation);
             statement.execute();
 
 
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
-            try {
-                dbUtils.close(connection, statement);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
+            dbUtils.close(connection);
+            dbUtils.close(statement);
         }
     }
 
@@ -143,11 +139,9 @@ public class PersonService {
 
         } catch (SQLException ex) {
         } finally {
-            try {
-                dbUtils.close(connection, statement, resultSet);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
+            dbUtils.close(connection);
+            dbUtils.close(statement);
+            dbUtils.close(resultSet);
         }
 
         return studentAndClassArrayList;
@@ -165,7 +159,8 @@ public class PersonService {
 
             connection = dataSource.getConnection();
             statement = connection.prepareStatement("SELECT * FROM person\n" +
-                    "WHERE name = '" + name + "'; ");
+                    "WHERE name = ?; ");
+            statement.setString(1,name);
             resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
@@ -176,11 +171,9 @@ public class PersonService {
 
         } catch (SQLException ex) {
         } finally {
-            try {
-                dbUtils.close(connection, statement, resultSet);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
+            dbUtils.close(connection);
+            dbUtils.close(statement);
+            dbUtils.close(resultSet);
         }
 
         return person;

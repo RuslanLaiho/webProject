@@ -21,7 +21,7 @@ public class PersonController {
     }
 
     @PostMapping("/insertPerson")
-    public void insertPerson(@RequestParam("name") String name, @RequestParam("occupation") String occupation) {
+    public void insertPerson(@RequestBody String name, @RequestBody String occupation) {
         personService.insertPerson(name, occupation);
     }
 

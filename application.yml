@@ -1,5 +1,13 @@
 #Config yml file
 
-   Url: jdbc:postgresql://localhost:5432/postgres
-   User: postgres
-   Password: 1488228
+Url: jdbc:postgresql://localhost:5432/postgres
+User: postgres
+Password: 1488228
+
+#MyFlywayConfig
+
+flyway.user: postgres
+flyway.password: 1488228
+flyway.schemas: app-db
+flyway.url: jdbc:postgresql://localhost:5432/postgres
+flyway.locations: filesystem:src/main/resources/db/migration

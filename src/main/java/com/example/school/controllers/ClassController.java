@@ -30,12 +30,12 @@ public class ClassController {
     }
 
     @PostMapping("/insertClass")
-    public void insertClass(@RequestParam("className") String className, @RequestParam("classYear") int classYear, @RequestParam("classTeacher") String classTeacher) {
+    public void insertClass(@RequestBody String className, @RequestBody int classYear, @RequestBody String classTeacher) {
         classService.insertClass(className, classYear, classTeacher);
     }
 
     @PostMapping("/updateClassYear")
-    public void UpdateClassYear(@RequestParam("updateYear") int updateYear, @RequestParam("classYear") int classYear, @RequestParam("className") String className) {
+    public void UpdateClassYear(@RequestBody int updateYear, @RequestBody int classYear, @RequestBody String className) {
         classService.updateClassYear(updateYear, classYear, className);
     }
 
