@@ -39,8 +39,7 @@ public class MarkService {
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
-            dbUtils.close(connection);
-            dbUtils.close(statement);
+            dbUtils.close(connection, statement);
         }
 
     }
@@ -75,9 +74,7 @@ public class MarkService {
 
         } catch (SQLException ex) {
         } finally {
-            dbUtils.close(connection);
-            dbUtils.close(statement);
-            dbUtils.close(resultSet);
+            dbUtils.close(connection, statement, resultSet);
         }
 
         return subjectAndMarkList;
@@ -110,9 +107,7 @@ public class MarkService {
 
         } catch (SQLException ex) {
         } finally {
-            dbUtils.close(connection);
-            dbUtils.close(statement);
-            dbUtils.close(resultSet);
+            dbUtils.close(connection, statement, resultSet);
         }
 
         return personAndMarkList;

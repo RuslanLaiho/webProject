@@ -1,6 +1,5 @@
 package com.example.school.services;
 
-import com.example.school.dto.Person;
 import com.example.school.dto.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,9 +43,7 @@ public class SubjectService {
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
-            dbUtils.close(connection);
-            dbUtils.close(statement);
-            dbUtils.close(resultSet);
+            dbUtils.close(connection, statement, resultSet);
         }
 
 
@@ -68,8 +65,7 @@ public class SubjectService {
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
-            dbUtils.close(connection);
-            dbUtils.close(statement);
+            dbUtils.close(connection, statement);
         }
     }
 }

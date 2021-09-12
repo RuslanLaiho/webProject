@@ -1,12 +1,15 @@
 package com.example.school.controllers;
 
 import com.example.school.dto.Class;
+import com.example.school.dto.InsertClassDTO;
 import com.example.school.dto.Person;
 import com.example.school.services.ClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 public class ClassController {
@@ -30,8 +33,8 @@ public class ClassController {
     }
 
     @PostMapping("/insertClass")
-    public void insertClass(@RequestBody String className, @RequestBody int classYear, @RequestBody String classTeacher) {
-        classService.insertClass(className, classYear, classTeacher);
+    public void insertClass(@RequestBody InsertClassDTO insertClassDTO) {
+        classService.insertClass(insertClassDTO.className, insertClassDTO.classYear, insertClassDTO.classTeacher, insertClassDTO.birthYear, insertClassDTO.phone);
     }
 
     @PostMapping("/updateClassYear")

@@ -46,9 +46,7 @@ public class ClassService {
 
         } catch (SQLException ex) {
         } finally {
-            dbUtils.close(connection);
-            dbUtils.close(statement);
-            dbUtils.close(resultSet);
+            dbUtils.close(connection, statement, resultSet);
         }
 
         return classArrayList;
@@ -83,37 +81,68 @@ public class ClassService {
 
         } catch (SQLException ex) {
         } finally {
-            dbUtils.close(connection);
-            dbUtils.close(statement);
-            dbUtils.close(resultSet);
+            dbUtils.close(connection, statement, resultSet);
         }
 
         return personArrayList;
     }
 
-    public void insertClass(String className, int classYear, String classTeacher) {
+    public void insertClass(String className, int classYear, String classTeacher, int birthYear, String phone) {
+
         Connection connection = null;
         PreparedStatement statement = null;
+        ResultSet resultSet = null;
         DBUtils dbUtils = new DBUtils();
+        Integer teacherId = null;
 
-        try {
+        Class cheсkClass = selectClass(classYear, className);
 
-            connection = dataSource.getConnection();
-            statement = connection.prepareStatement("INSERT INTO Class (class_name, class_year, teacher_id) " +
-                    "VALUES (?, ?, (SELECT person_id " +
-                    "FROM person " +
-                    "WHERE name = ?)); ");
-            statement.setString(1, className);
-            statement.setInt(2, classYear);
-            statement.setString(3, classTeacher);
-            statement.execute();
+        if(cheсkClass.className==null) {
+            try {
+                connection = dataSource.getConnection();
+                statement = connection.prepareStatement("SELECT person_id FROM person\n" +
+                        "WHERE name = ? " +
+                        "AND birthyear = ? " +
+                        "AND phone = ?;");
+                statement.setString(1, classTeacher);
+                statement.setInt(2, birthYear);
+                statement.setString(3, phone);
 
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            dbUtils.close(connection);
-            dbUtils.close(statement);
+                resultSet = statement.executeQuery();
+
+                while (resultSet.next()) {
+                    teacherId = resultSet.getInt(1);
+                }
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            } finally {
+                dbUtils.close(connection, statement, resultSet);
+            }
+
+            if (teacherId != null) {
+                try {
+
+                    connection = dataSource.getConnection();
+                    statement = connection.prepareStatement("INSERT INTO Class (class_name, class_year, teacher_id) " +
+                            "VALUES (?, ?, ?); ");
+                    statement.setString(1, className);
+                    statement.setInt(2, classYear);
+                    statement.setInt(3, teacherId);
+                    statement.execute();
+
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                } finally {
+                    dbUtils.close(connection, statement);
+                }
+            } else {
+                System.out.println("Нет учителя");
+            }
+        } else {
+            System.out.println("Такой класс уже сужествует");
         }
+
     }
 
     public Class selectClass(int year, String className) {
@@ -147,9 +176,7 @@ public class ClassService {
 
         } catch (SQLException ex) {
         } finally {
-          dbUtils.close(connection);
-          dbUtils.close(statement);
-          dbUtils.close(resultSet);
+          dbUtils.close(connection, statement, resultSet);
         }
 
         return foundClass;
@@ -175,8 +202,7 @@ public class ClassService {
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
-            dbUtils.close(connection);
-            dbUtils.close(statement);
+            dbUtils.close(connection, statement);
         }
     }
 }

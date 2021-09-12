@@ -40,8 +40,7 @@ public class StudentAndClassService {
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
-            dbUtils.close(connection);
-            dbUtils.close(statement);
+            dbUtils.close(connection, statement);
         }
 
     }

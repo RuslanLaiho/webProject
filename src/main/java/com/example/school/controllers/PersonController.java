@@ -21,8 +21,8 @@ public class PersonController {
     }
 
     @PostMapping("/insertPerson")
-    public void insertPerson(@RequestBody String name, @RequestBody String occupation) {
-        personService.insertPerson(name, occupation);
+    public void insertPerson(@RequestBody Person person) {
+        personService.insertPerson(person.name, person.occupation, person.birthYear, person.phone);
     }
 
     @GetMapping("/selectPersonByMark")
@@ -36,7 +36,10 @@ public class PersonController {
     }
 
     @GetMapping("/selectPerson")
-    public Person selectPerson(@RequestParam String name){
-        return personService.selectPerson(name);
+    public Person selectPerson(@RequestParam String name, @RequestParam int birthYear, @RequestParam String phone){
+        return personService.selectPerson(name, birthYear, phone);
     }
+
+    @GetMapping("/selectAllTeacher")
+    public List<Person> selectAllTeacher() {return personService.selectAllTheacher();}
 }
