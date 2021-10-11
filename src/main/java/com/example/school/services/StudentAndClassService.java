@@ -14,7 +14,7 @@ public class StudentAndClassService {
     @Autowired
     public DataSource dataSource;
 
-    public void insertStudentAndClass(String studentName, int classYear, String className) {
+    public void save(String studentName, int classYear, String className) {
 
         Connection connection = null;
         PreparedStatement statement = null;
