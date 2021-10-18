@@ -10,24 +10,25 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/mark")
 public class MarkController {
 
     @Autowired
     public MarkService markService;
 
-    @PostMapping("/insertMark")
-    public void insertMark(@RequestBody Mark mark) {
-        markService.insertMark(mark);
+    @PostMapping("/save")
+    public void save(@RequestBody Mark mark) {
+        markService.save(mark);
     }
 
-    @GetMapping("/SelectAllMarkOfStudent")
-    public List<SubjectAndMark> selectAllMarkOfStudent(@RequestParam String name) {
-        return markService.selectAllMarkOfStudent(name);
+    @GetMapping("/findByFilterSubject")
+    public List<SubjectAndMark> findByFilterSubject(@RequestParam String name) {
+        return markService.findByFilterSubject(name);
     }
 
-    @GetMapping("/selectMarkOfSubject")
-    public  List<PersonAndMark> selectMarkOfSubject(@RequestParam String subject) {
-        return markService.selectMarkOfSubject(subject);
+    @GetMapping("/findByFilterPerson")
+    public  List<PersonAndMark> findByFilterPerson(@RequestParam String subject) {
+        return markService.findByFilterPerson(subject);
     }
 
 }

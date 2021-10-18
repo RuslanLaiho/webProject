@@ -20,7 +20,7 @@ public class PersonService {
     @Autowired
     public DataSource dataSource;
 
-    public List<Person> selectAllPerson() {
+    public List<Person> getAll() {
 
         Connection connection = null;
         PreparedStatement statement = null;
@@ -54,7 +54,42 @@ public class PersonService {
         return personList;
     }
 
-    public List<SubjectAndPerson> selectPersonByMark(int mark) {
+    public ArrayList<Person> findByFilterClass(int year, String className) {
+        ArrayList<Person> personArrayList = new ArrayList<Person>();
+
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        DBUtils dbUtils = new DBUtils();
+
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("SELECT person.person_id, person.name, person.occupation FROM class_student " +
+                    "JOIN Person ON (class_student.student_id = person.person_id) WHERE class_student.class_id = " +
+                    "(SELECT class_id FROM Class WHERE class_year = ? and class_name = ?);");
+            statement.setInt(1, year);
+            statement.setString(2, className);
+            resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Person timePerson = new Person();
+                timePerson.personId = resultSet.getInt(1);
+                timePerson.name = resultSet.getString(2);
+                timePerson.occupation = resultSet.getString(3);
+
+                personArrayList.add(timePerson);
+            }
+
+
+        } catch (SQLException ex) {
+        } finally {
+            dbUtils.close(connection, statement, resultSet);
+        }
+
+        return personArrayList;
+    }
+
+    public List<SubjectAndPerson> findByFilterPerson(int mark) {
         ArrayList<SubjectAndPerson> subjectAndPersonArrayList = new ArrayList<SubjectAndPerson>();
 
         Connection connection = null;
@@ -86,7 +121,7 @@ public class PersonService {
         return subjectAndPersonArrayList;
     }
 
-    public void insertPerson(String name, String occupation, int birthYear, String phone) {
+    public void save(String name, String occupation, int birthYear, String phone) {
         Connection connection = null;
         PreparedStatement statement = null;
         DBUtils dbUtils = new DBUtils();
@@ -113,7 +148,7 @@ public class PersonService {
         }
     }
 
-    public List<StudentAndClass> selectAllStudent() {
+    public List<StudentAndClass> findStudent() {
         ArrayList<StudentAndClass> studentAndClassArrayList = new ArrayList<StudentAndClass>();
 
         Connection connection = null;
@@ -148,7 +183,7 @@ public class PersonService {
         return studentAndClassArrayList;
     }
 
-    public Person selectPerson(String name, int birthYear, String phone) {
+    public Person find(String name, int birthYear, String phone) {
         Person person = new Person();
 
         Connection connection = null;

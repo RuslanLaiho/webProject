@@ -18,7 +18,7 @@ public class MarkService {
     @Autowired
     public DataSource dataSource;
 
-    public void insertMark(Mark mark) {
+    public void save(Mark mark) {
 
         Connection connection = null;
         PreparedStatement statement = null;
@@ -44,7 +44,7 @@ public class MarkService {
 
     }
 
-    public List<SubjectAndMark> selectAllMarkOfStudent(String name) {
+    public List<SubjectAndMark> findByFilterSubject(String name) {
 
         ArrayList<SubjectAndMark> subjectAndMarkList = new ArrayList<SubjectAndMark>();
 
@@ -80,7 +80,7 @@ public class MarkService {
         return subjectAndMarkList;
     }
 
-    public List<PersonAndMark> selectMarkOfSubject(String subject) {
+    public List<PersonAndMark> findByFilterPerson(String subject) {
         ArrayList<PersonAndMark> personAndMarkList = new ArrayList<PersonAndMark>();
 
         Connection connection = null;

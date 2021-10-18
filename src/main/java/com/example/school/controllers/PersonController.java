@@ -10,36 +10,42 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/person")
 public class PersonController {
 
     @Autowired
     public PersonService personService;
 
-    @GetMapping("/selectAllPerson")
-    public List<Person> selectAllPerson() {
-        return personService.selectAllPerson();
+    @GetMapping("/getAll")
+    public List<Person> getAll() {
+        return personService.getAll();
     }
 
-    @PostMapping("/insertPerson")
-    public void insertPerson(@RequestBody Person person) {
-        personService.insertPerson(person.name, person.occupation, person.birthYear, person.phone);
+    @GetMapping("/findByFilterClass")
+    public List<Person> findByFilterClass(int year, String className) {
+        return personService.findByFilterClass(year, className);
     }
 
-    @GetMapping("/selectPersonByMark")
-    public List<SubjectAndPerson> selectPersonByMark(int mark) {
-        return personService.selectPersonByMark(mark);
+    @PostMapping("/save")
+    public void save(@RequestBody Person person) {
+        personService.save(person.name, person.occupation, person.birthYear, person.phone);
     }
 
-    @GetMapping("/selectAllStudent")
-    public List<StudentAndClass> selectAllStudent() {
-        return personService.selectAllStudent();
+    @GetMapping("/findByFilterPerson")
+    public List<SubjectAndPerson> findByFilterPerson(int mark) {
+        return personService.findByFilterPerson(mark);
     }
 
-    @GetMapping("/selectPerson")
-    public Person selectPerson(@RequestParam String name, @RequestParam int birthYear, @RequestParam String phone){
-        return personService.selectPerson(name, birthYear, phone);
+    @GetMapping("/findStudent")
+    public List<StudentAndClass> findStudent() {
+        return personService.findStudent();
     }
 
-    @GetMapping("/selectAllTeacher")
-    public List<Person> selectAllTeacher() {return personService.selectAllTheacher();}
+    @GetMapping("/find")
+    public Person find(@RequestParam String name, @RequestParam int birthYear, @RequestParam String phone){
+        return personService.find(name, birthYear, phone);
+    }
+
+    @GetMapping("/findAllTeacher")
+    public List<Person> findAllTeacher() {return personService.selectAllTheacher();}
 }

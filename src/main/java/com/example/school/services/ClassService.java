@@ -1,10 +1,8 @@
 package com.example.school.services;
 
 import com.example.school.dto.Class;
-import com.example.school.dto.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -20,7 +18,7 @@ public class ClassService {
     @Autowired
     public DataSource dataSource;
 
-    public List<Class> selectAllClass() {
+    public List<Class> getAll() {
         ArrayList<Class> classArrayList = new ArrayList<Class>();
 
         Connection connection = null;
@@ -52,42 +50,7 @@ public class ClassService {
         return classArrayList;
     }
 
-    public ArrayList<Person> selectListOfClass(int year, String className) {
-        ArrayList<Person> personArrayList = new ArrayList<Person>();
-
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        DBUtils dbUtils = new DBUtils();
-
-        try {
-            connection = dataSource.getConnection();
-            statement = connection.prepareStatement("SELECT person.person_id, person.name, person.occupation FROM class_student " +
-                    "JOIN Person ON (class_student.student_id = person.person_id) WHERE class_student.class_id = " +
-                    "(SELECT class_id FROM Class WHERE class_year = ? and class_name = ?);");
-            statement.setInt(1, year);
-            statement.setString(2, className);
-            resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                Person timePerson = new Person();
-                timePerson.personId = resultSet.getInt(1);
-                timePerson.name = resultSet.getString(2);
-                timePerson.occupation = resultSet.getString(3);
-
-                personArrayList.add(timePerson);
-            }
-
-
-        } catch (SQLException ex) {
-        } finally {
-            dbUtils.close(connection, statement, resultSet);
-        }
-
-        return personArrayList;
-    }
-
-    public void insertClass(String className, int classYear, String classTeacher, int birthYear, String phone) {
+    public void save(String className, int classYear, String classTeacher, int birthYear, String phone) {
 
         Connection connection = null;
         PreparedStatement statement = null;
@@ -95,7 +58,7 @@ public class ClassService {
         DBUtils dbUtils = new DBUtils();
         Integer teacherId = null;
 
-        Class cheсkClass = selectClass(classYear, className);
+        Class cheсkClass = find(classYear, className);
 
         if(cheсkClass.className==null) {
             try {
@@ -145,7 +108,7 @@ public class ClassService {
 
     }
 
-    public Class selectClass(int year, String className) {
+    public Class find(int year, String className) {
         Class foundClass = new Class();
 
         Connection connection = null;
@@ -182,7 +145,7 @@ public class ClassService {
         return foundClass;
     }
 
-    public void updateClassYear(int updateYear, int classYear, String className) {
+    public void update(int updateYear, int classYear, String className) {
         Connection connection = null;
         PreparedStatement statement = null;
         DBUtils dbUtils = new DBUtils();

@@ -8,17 +8,18 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/subject")
 public class SubjectController {
 
     @Autowired
     public SubjectService subjectService;
 
-    @GetMapping("/selectAllSubject")
-    public List<Subject> selectAllSubject() {
-        return subjectService.selectAllSubject();
+    @GetMapping("/getAll")
+    public List<Subject> getAll() {
+        return subjectService.getAll();
     }
 
-    @PostMapping("/insertSubject")
-    public void insertSubject(@RequestBody String subject) {subjectService.insertSubject(subject);}
+    @PostMapping("/save")
+    public void save(@RequestBody String subject) {subjectService.save(subject);}
 
 }

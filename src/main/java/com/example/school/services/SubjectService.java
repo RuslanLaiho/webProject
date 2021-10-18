@@ -18,7 +18,7 @@ public class SubjectService {
     @Autowired
     public DataSource dataSource;
 
-    public List<Subject> selectAllSubject() {
+    public List<Subject> getAll() {
 
         List<Subject> subjectList = new ArrayList<Subject>();
 
@@ -50,7 +50,7 @@ public class SubjectService {
         return subjectList;
     }
 
-    public void insertSubject(String subject) {
+    public void save(String subject) {
         Connection connection = null;
         PreparedStatement statement = null;
         DBUtils dbUtils = new DBUtils();
