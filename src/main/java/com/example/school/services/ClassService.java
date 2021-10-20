@@ -1,6 +1,7 @@
 package com.example.school.services;
 
 import com.example.school.dto.Class;
+import com.example.school.dto.InsertClassDTO;
 import com.example.school.dto.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -87,7 +88,7 @@ public class ClassService {
         return personArrayList;
     }
 
-    public void insertClass(String className, int classYear, String classTeacher, int birthYear, String phone) {
+    public void insertClass(InsertClassDTO insertClassDTO) {
 
         Connection connection = null;
         PreparedStatement statement = null;
@@ -95,7 +96,7 @@ public class ClassService {
         DBUtils dbUtils = new DBUtils();
         Integer teacherId = null;
 
-        Class cheсkClass = selectClass(classYear, className);
+        Class cheсkClass = selectClass(insertClassDTO.classYear, insertClassDTO.className);
 
         if(cheсkClass.className==null) {
             try {
@@ -104,9 +105,9 @@ public class ClassService {
                         "WHERE name = ? " +
                         "AND birthyear = ? " +
                         "AND phone = ?;");
-                statement.setString(1, classTeacher);
-                statement.setInt(2, birthYear);
-                statement.setString(3, phone);
+                statement.setString(1, insertClassDTO.classTeacher);
+                statement.setInt(2, insertClassDTO.birthYear);
+                statement.setString(3, insertClassDTO.phone);
 
                 resultSet = statement.executeQuery();
 
@@ -126,8 +127,8 @@ public class ClassService {
                     connection = dataSource.getConnection();
                     statement = connection.prepareStatement("INSERT INTO Class (class_name, class_year, teacher_id) " +
                             "VALUES (?, ?, ?); ");
-                    statement.setString(1, className);
-                    statement.setInt(2, classYear);
+                    statement.setString(1, insertClassDTO.className);
+                    statement.setInt(2, insertClassDTO.classYear);
                     statement.setInt(3, teacherId);
                     statement.execute();
 

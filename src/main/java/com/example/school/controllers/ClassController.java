@@ -34,7 +34,7 @@ public class ClassController {
 
     @PostMapping("/insertClass")
     public void insertClass(@RequestBody InsertClassDTO insertClassDTO) {
-        classService.insertClass(insertClassDTO.className, insertClassDTO.classYear, insertClassDTO.classTeacher, insertClassDTO.birthYear, insertClassDTO.phone);
+        classService.insertClass(insertClassDTO);
     }
 
     @PostMapping("/updateClassYear")
